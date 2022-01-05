@@ -7,13 +7,30 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 
 @Configuration
 public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests((requests) -> {
+        http.cors().configurationSource(new CorsConfigurationSource() {
+            @Override
+            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                CorsConfiguration config = new CorsConfiguration();
+                config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+                config.setAllowedMethods(Collections.singletonList("*"));
+                config.setAllowCredentials(true);
+                config.setAllowedHeaders(Collections.singletonList("*"));
+                config.setMaxAge(3600L);
+                return config;
+            }
+        }).and().authorizeRequests((requests) -> {
             ((ExpressionUrlAuthorizationConfigurer.AuthorizedUrl) requests.antMatchers("/myAccount")).authenticated();
             ((ExpressionUrlAuthorizationConfigurer.AuthorizedUrl) requests.antMatchers("/myBalance")).authenticated();
             ((ExpressionUrlAuthorizationConfigurer.AuthorizedUrl) requests.antMatchers("/myLoans")).authenticated();
@@ -21,6 +38,7 @@ public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
             ((ExpressionUrlAuthorizationConfigurer.AuthorizedUrl) requests.antMatchers("/notices")).permitAll();
             ((ExpressionUrlAuthorizationConfigurer.AuthorizedUrl) requests.antMatchers("/contact")).permitAll();
         });
+        http.csrf().ignoringAntMatchers("/contact").ignoringAntMatchers("/notices").csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
         http.formLogin();
         http.httpBasic();
     }

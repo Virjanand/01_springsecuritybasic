@@ -1,49 +1,79 @@
 package com.eazybytes.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 
 @Entity
 public class Customer {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-    private String email;
-    private String pwd;
-    private String role;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "customer_id")
+	private int id;
+	private String name;
+	private String email;
+	@Column(name = "mobile_number")
+	private String mobileNumber;
+	@JsonIgnore
+	private String pwd;
+	private String role;
+	@Column(name = "create_dt")
+	private String createDt;
 
-    public int getId() {
-        return id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getPwd() {
-        return pwd;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String getRole() {
-        return role;
-    }
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
 
-    public void setRole(String role) {
-        this.role = role;
-    }
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+
+	public String getPwd() {
+		return pwd;
+	}
+
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public String getCreateDt() {
+		return createDt;
+	}
+
+	public void setCreateDt(String createDt) {
+		this.createDt = createDt;
+	}
 }
