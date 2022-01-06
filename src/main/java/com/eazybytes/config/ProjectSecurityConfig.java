@@ -3,6 +3,7 @@ package com.eazybytes.config;
 import com.eazybytes.filter.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
@@ -18,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
@@ -38,7 +40,7 @@ public class ProjectSecurityConfig extends WebSecurityConfigurerAdapter {
         }).and().authorizeRequests((requests) -> {
             ((ExpressionUrlAuthorizationConfigurer.AuthorizedUrl) requests.antMatchers("/myAccount")).hasRole("USER");
             ((ExpressionUrlAuthorizationConfigurer.AuthorizedUrl) requests.antMatchers("/myBalance")).hasAnyRole("USER", "ADMIN");
-            ((ExpressionUrlAuthorizationConfigurer.AuthorizedUrl) requests.antMatchers("/myLoans")).hasRole("ROOT");
+            ((ExpressionUrlAuthorizationConfigurer.AuthorizedUrl) requests.antMatchers("/myLoans")).authenticated();
             ((ExpressionUrlAuthorizationConfigurer.AuthorizedUrl) requests.antMatchers("/myCards")).authenticated();
             ((ExpressionUrlAuthorizationConfigurer.AuthorizedUrl) requests.antMatchers("/notices")).permitAll();
             ((ExpressionUrlAuthorizationConfigurer.AuthorizedUrl) requests.antMatchers("/contact")).permitAll();

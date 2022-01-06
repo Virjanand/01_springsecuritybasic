@@ -3,6 +3,7 @@ package com.eazybytes.controller;
 import com.eazybytes.model.Contact;
 import com.eazybytes.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ public class ContactController {
 	private ContactRepository contactRepository;
 	
 	@PostMapping("/contact")
+	@PreFilter("filterObject.contactName == 'Test'")
 	public Contact saveContactInquiryDetails(@RequestBody Contact contact) {
 		contact.setContactId(getServiceReqNumber());
 		contact.setCreateDt(new Date(System.currentTimeMillis()));
